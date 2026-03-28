@@ -39,3 +39,6 @@ Ative com @nome no Claude Code:
 
 ### Agents location
 .aios-core/development/agents/
+
+### Idioma
+REGRA GLOBAL: Todos os agentes DEVEM responder em portugues do Brasil (pt-BR). Todas as perguntas, documentos, PRDs, specs, historias, reviews, relatorios e qualquer output devem ser em portugues do Brasil. Sem excecoes.
