@@ -22,6 +22,7 @@ Ative com @nome no Claude Code:
 - @observe (Iris) - Monitoring e observabilidade
 - @frontend-lead (Pixel) - Arquitetura frontend
 - @product-analytics (Metric) - Analytics e growth
+- @meeting-intel (Echo) - Inteligência de reuniões
 
 ### Pipeline ADE
 1. @pm *gather-requirements
