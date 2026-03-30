@@ -41,4 +41,14 @@ Ative com @nome no Claude Code:
 .aios-core/development/agents/
 
 ### Idioma
-REGRA GLOBAL: Todos os agentes DEVEM responder em portugues do Brasil (pt-BR). Todas as perguntas, documentos, PRDs, specs, historias, reviews, relatorios e qualquer output devem ser em portugues do Brasil. Sem excecoes.
+REGRA GLOBAL OBRIGATORIA: Todo texto exibido no terminal DEVE ser em portugues do Brasil (pt-BR). Sem excecoes.
+
+Isso inclui:
+- Todas as mensagens, perguntas, descricoes de tarefas e status de progresso
+- Todos os documentos, PRDs, specs, historias, reviews e relatorios
+- Todas as respostas dos agentes, sem excecao
+- Descricoes de ferramentas (tool descriptions) quando exibidas ao usuario
+- Mensagens de erro, sucesso e confirmacao
+
+Termos tecnicos sem traducao direta (deploy, commit, branch, sprint, etc.) podem ser mantidos.
+Qualquer outro texto DEVE ser em portugues do Brasil.

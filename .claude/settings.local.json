@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude --version)",
+      "Bash(npm install:*)",
+      "Skill(update-config)",
+      "Bash(node:*)",
+      "Bash(scp *.sh root@187.127.101.191:/root/claude-intel/)"
+    ]
+  }
+}
