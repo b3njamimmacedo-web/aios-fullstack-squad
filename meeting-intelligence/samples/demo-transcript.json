@@ -1,0 +1,197 @@
+[
+  {
+    "timestamp": "00:00:15",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Olá, bom dia! Obrigado por reservar esse tempo. Vou apresentar como podemos construir a plataforma de e-commerce que vocês precisam."
+  },
+  {
+    "timestamp": "00:00:32",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Bom dia, Benjamim! Estamos bem ansiosos. Temos uma loja física há 10 anos e sabemos que precisamos entrar no digital de forma séria."
+  },
+  {
+    "timestamp": "00:00:55",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Exato. Já tentamos com plataformas prontas como Shopify, mas precisamos de algo personalizado. Nosso catálogo tem mais de 5.000 produtos e precisamos de integrações específicas."
+  },
+  {
+    "timestamp": "00:01:20",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Entendi perfeitamente. Vamos mapear tudo que vocês precisam. Primeiro, me contem sobre o fluxo de vendas atual."
+  },
+  {
+    "timestamp": "00:01:45",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Hoje vendemos no balcão e por WhatsApp. Temos um sistema ERP legado, o Protheus da TOTVS, que controla estoque e fiscal. Qualquer solução precisa se integrar com ele."
+  },
+  {
+    "timestamp": "00:02:15",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Além do ERP, precisamos de integração com os Correios e transportadoras, cálculo de frete em tempo real. E nosso maior problema hoje é o controle de estoque multicanal."
+  },
+  {
+    "timestamp": "00:02:50",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Perfeito. Então temos: e-commerce completo, integração TOTVS Protheus, gestão de estoque multicanal, e logística. Que mais?"
+  },
+  {
+    "timestamp": "00:03:15",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Pagamentos. Precisamos aceitar Pix, cartão de crédito parcelado, e boleto. E queremos um programa de fidelidade para os clientes."
+  },
+  {
+    "timestamp": "00:03:40",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "E um dashboard para eu acompanhar vendas em tempo real. Hoje eu dependo de relatórios manuais do ERP e leva dias."
+  },
+  {
+    "timestamp": "00:04:05",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Ótimo. E sobre o visual da loja, vocês têm referências? Alguma loja online que vocês admiram?"
+  },
+  {
+    "timestamp": "00:04:25",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Gostamos muito da experiência da Amazon e da Americanas. Busca inteligente, recomendações de produtos, checkout rápido. Queremos algo assim, mas com a nossa identidade visual."
+  },
+  {
+    "timestamp": "00:04:55",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "E precisa ser rápido. Nosso público está no interior de São Paulo, muita gente com internet não tão boa. O site precisa ser leve."
+  },
+  {
+    "timestamp": "00:05:20",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Entendido. Performance é prioridade. Posso sugerir Next.js no frontend com SSR para carregamento rápido, e um backend robusto em Node.js com cache agressivo."
+  },
+  {
+    "timestamp": "00:05:50",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Confio na parte técnica em você. O que me importa é: vai funcionar no celular? 70% dos nossos clientes vão acessar pelo celular."
+  },
+  {
+    "timestamp": "00:06:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Com certeza. Mobile-first é o padrão. Posso até entregar como PWA - Progressive Web App - que funciona quase como um app nativo, sem precisar publicar nas lojas."
+  },
+  {
+    "timestamp": "00:06:40",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Isso seria incrível! E sobre o programa de fidelidade, pensamos em algo com pontos. Cada compra gera pontos que podem ser trocados por desconto."
+  },
+  {
+    "timestamp": "00:07:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Posso fazer isso. Sistema de pontos com níveis de cliente: Bronze, Prata, Ouro. Cada nível desbloqueia benefícios diferentes. Também posso adicionar cupons de desconto e promoções programadas."
+  },
+  {
+    "timestamp": "00:07:45",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Perfeito. Agora, a parte que mais me preocupa: segurança. Já ouvimos histórias de lojas hackeadas, dados de clientes vazados."
+  },
+  {
+    "timestamp": "00:08:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Segurança é prioridade máxima. Vamos usar HTTPS obrigatório, autenticação JWT com refresh tokens, criptografia de dados sensíveis, e compliance com LGPD. Todos os pagamentos passam por gateway certificado PCI-DSS."
+  },
+  {
+    "timestamp": "00:08:50",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "E backups? Se o servidor cair, em quanto tempo voltamos?"
+  },
+  {
+    "timestamp": "00:09:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Backup automático diário, replicação em tempo real no banco de dados, e deploy em cloud com auto-scaling. Se um servidor cair, outro assume em segundos. Downtime máximo estimado: menos de 1 minuto."
+  },
+  {
+    "timestamp": "00:09:45",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "E SEO? Precisamos aparecer no Google. Hoje nossa presença online é praticamente zero."
+  },
+  {
+    "timestamp": "00:10:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "O Next.js já ajuda muito com SEO por causa do Server-Side Rendering. Vou incluir sitemap automático, meta tags dinâmicas, Schema.org para produtos, e URLs amigáveis. Também posso configurar Google Analytics e Search Console."
+  },
+  {
+    "timestamp": "00:10:50",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Excelente. Vamos falar de prazos e valores? Temos um evento grande em setembro e gostaríamos de lançar a loja antes."
+  },
+  {
+    "timestamp": "00:11:15",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Setembro é factível. Estamos em março, então temos cerca de 6 meses. Minha sugestão é entregarmos em fases: MVP em 2 meses com catálogo e checkout, depois integrações ERP e logística no mês 3-4, e programa de fidelidade e dashboard no mês 5-6."
+  },
+  {
+    "timestamp": "00:11:55",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "E o investimento? Temos um orçamento de até R$ 200.000 para esse projeto."
+  },
+  {
+    "timestamp": "00:12:20",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Para o escopo completo que discutimos, estamos falando em torno de R$ 120.000 a R$ 180.000 dependendo do nível de personalização. A integração com TOTVS é o item mais complexo e variável."
+  },
+  {
+    "timestamp": "00:12:55",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "E após o lançamento, qual o custo mensal de manutenção?"
+  },
+  {
+    "timestamp": "00:13:15",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Infraestrutura cloud fica em torno de R$ 1.500 a R$ 3.000 por mês dependendo do tráfego. E ofereço planos de suporte e manutenção a partir de R$ 3.000 mensais, que inclui atualizações, correções e pequenas melhorias."
+  },
+  {
+    "timestamp": "00:13:50",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Isso cabe no nosso planejamento. Ana, o que você acha?"
+  },
+  {
+    "timestamp": "00:14:05",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Estou bem otimista. Só quero garantir que teremos treinamento para a equipe. Temos 8 pessoas que vão operar o sistema."
+  },
+  {
+    "timestamp": "00:14:30",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Com certeza. Incluo treinamento presencial ou remoto para a equipe, documentação completa, e vídeos tutoriais. O painel administrativo vai ser intuitivo."
+  },
+  {
+    "timestamp": "00:14:55",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Ótimo. Acho que temos tudo alinhado. Qual o próximo passo?"
+  },
+  {
+    "timestamp": "00:15:10",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Vou preparar uma proposta formal detalhada com tudo que discutimos, incluindo cronograma, valores por fase, e escopo técnico. Envio até sexta-feira. Depois marcamos para revisar juntos e, se aprovado, começamos na segunda seguinte."
+  },
+  {
+    "timestamp": "00:15:40",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Perfeito, Benjamim. Estamos muito confiantes. Vamos esperar a proposta."
+  },
+  {
+    "timestamp": "00:15:55",
+    "speaker": "Ana (Cliente - Gerente Comercial)",
+    "text": "Só mais uma coisa: vocês fazem integração com marketplace? Tipo Mercado Livre e Shopee? Seria ótimo gerenciar tudo de um lugar só."
+  },
+  {
+    "timestamp": "00:16:20",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Sim! Posso incluir integração com Mercado Livre, Shopee e Amazon. Fica como um hub central de vendas. Isso entraria na fase 3, junto com o dashboard avançado."
+  },
+  {
+    "timestamp": "00:16:50",
+    "speaker": "Carlos (Cliente - CEO)",
+    "text": "Isso seria o cenário ideal. Tudo centralizado. Benjamim, muito obrigado pela reunião. Ficamos no aguardo."
+  },
+  {
+    "timestamp": "00:17:05",
+    "speaker": "Benjamim (Desenvolvedor)",
+    "text": "Eu que agradeço a confiança! Vou mandar a proposta até sexta. Qualquer dúvida, estou à disposição. Boa semana para vocês!"
+  }
+]

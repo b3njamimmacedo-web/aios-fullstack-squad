@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Intelligence - Painel</title>
+  <style>
+    /* === Reset e Base === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a1a;
+      --bg-secondary: #12122a;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(255, 255, 255, 0.08);
+      --bg-glass: rgba(255, 255, 255, 0.06);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888aa;
+      --text-muted: #555570;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --accent-glow: rgba(108, 92, 231, 0.3);
+      --success: #00d68f;
+      --warning: #ffaa00;
+      --danger: #ff5577;
+      --info: #00b4d8;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow-glow: 0 0 30px rgba(108, 92, 231, 0.15);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* === Layout Principal === */
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* === Header === */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding: 24px 28px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-title .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-badge.online {
+      background: rgba(0, 214, 143, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(0, 214, 143, 0.3);
+    }
+
+    .status-badge.offline {
+      background: rgba(255, 85, 119, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(255, 85, 119, 0.3);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* === Acoes Rapidas === */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .action-btn .icon {
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border-radius: 10px;
+    }
+
+    .action-btn.recording {
+      border-color: var(--danger);
+      animation: recording-pulse 1.5s infinite;
+    }
+
+    @keyframes recording-pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 85, 119, 0.2); }
+      50% { box-shadow: 0 0 25px rgba(255, 85, 119, 0.4); }
+    }
+
+    /* === Cards de Estatisticas === */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-light);
+    }
+
+    /* === Lista de Reunioes === */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .section-header .search-box {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      outline: none;
+      width: 250px;
+    }
+
+    .section-header .search-box::placeholder {
+      color: var(--text-muted);
+    }
+
+    .section-header .search-box:focus {
+      border-color: var(--accent);
+    }
+
+    .meetings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .meeting-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 20px 24px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .meeting-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .meeting-info h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .meeting-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .meeting-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meeting-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-small {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-small:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.processado { background: rgba(0, 214, 143, 0.15); color: var(--success); }
+    .badge.processando { background: rgba(255, 170, 0, 0.15); color: var(--warning); }
+    .badge.erro { background: rgba(255, 85, 119, 0.15); color: var(--danger); }
+    .badge.pendente { background: rgba(0, 180, 216, 0.15); color: var(--info); }
+
+    /* === Modal / Painel de Detalhes === */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .modal-close:hover { color: var(--text-primary); }
+
+    .detail-section {
+      margin-bottom: 20px;
+    }
+
+    .detail-section h4 {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .detail-section .content {
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .detail-actions .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: var(--accent);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .detail-actions .btn:hover {
+      background: var(--accent-light);
+    }
+
+    .detail-actions .btn.secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    /* === Upload Area === */
+    .upload-area {
+      border: 2px dashed var(--border-glass);
+      border-radius: var(--radius-sm);
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 32px;
+      transition: all 0.3s;
+      display: none;
+    }
+
+    .upload-area.visible { display: block; }
+
+    .upload-area.dragover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .upload-area p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .upload-area input[type="file"] { display: none; }
+
+    /* === Estado Vazio === */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text-primary); }
+
+    /* === Notificacao === */
+    .notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .notification.success {
+      background: rgba(0, 214, 143, 0.2);
+      border: 1px solid rgba(0, 214, 143, 0.4);
+      color: var(--success);
+    }
+
+    .notification.error {
+      background: rgba(255, 85, 119, 0.2);
+      border: 1px solid rgba(255, 85, 119, 0.4);
+      color: var(--danger);
+    }
+
+    .notification.info {
+      background: rgba(0, 180, 216, 0.2);
+      border: 1px solid rgba(0, 180, 216, 0.4);
+      color: var(--info);
+    }
+
+    /* === Spinner === */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-glass);
+      border-top: 2px solid var(--accent-light);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* === Responsivo === */
+    @media (max-width: 768px) {
+      .app { padding: 12px; }
+      .header { flex-direction: column; gap: 12px; text-align: center; }
+      .quick-actions { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .meeting-card { grid-template-columns: 1fr; }
+      .meeting-actions { justify-content: flex-start; }
+      .section-header { flex-direction: column; gap: 10px; }
+      .section-header .search-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">
+      <div>
+        <h1>Meeting Intelligence</h1>
+        <div class="subtitle">Painel de Controle</div>
+      </div>
+    </div>
+    <div id="statusBadge" class="status-badge offline">
+      <span class="status-dot"></span>
+      <span id="statusText">Verificando...</span>
+    </div>
+  </header>
+
+  <!-- Acoes Rapidas -->
+  <div class="quick-actions">
+    <button class="action-btn" id="btnCapturar" onclick="toggleCaptura()">
+      <span class="icon">&#127908;</span>
+      <span id="btnCapturarTexto">Iniciar Captura</span>
+    </button>
+    <button class="action-btn" onclick="toggleUpload()">
+      <span class="icon">&#128228;</span>
+      <span>Enviar Audio</span>
+    </button>
+    <button class="action-btn" onclick="carregarReunioes()">
+      <span class="icon">&#128260;</span>
+      <span>Atualizar Lista</span>
+    </button>
+    <button class="action-btn" onclick="verificarStatus()">
+      <span class="icon">&#9881;</span>
+      <span>Status do Sistema</span>
+    </button>
+  </div>
+
+  <!-- Area de Upload -->
+  <div class="upload-area" id="uploadArea">
+    <p>Arraste um arquivo de audio ou video aqui</p>
+    <p style="font-size: 0.75rem; color: var(--text-muted);">Formatos suportados: WAV, MP3, M4A, MP4, OGG, WebM, FLAC</p>
+    <button class="btn-small" onclick="document.getElementById('fileInput').click()" style="margin-top: 12px;">
+      Selecionar Arquivo
+    </button>
+    <input type="file" id="fileInput" accept="audio/*,video/*" onchange="enviarAudio(this.files[0])">
+    <div id="uploadProgress" style="margin-top: 12px; display: none;">
+      <span class="spinner"></span> Enviando...
+    </div>
+  </div>
+
+  <!-- Estatisticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total de Reunioes</div>
+      <div class="value" id="statTotal">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Processadas</div>
+      <div class="value" id="statProcessadas">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Propostas Geradas</div>
+      <div class="value" id="statPropostas">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Plataforma Ativa</div>
+      <div class="value" id="statPlataforma" style="font-size: 1.1rem;">-</div>
+    </div>
+  </div>
+
+  <!-- Lista de Reunioes -->
+  <div class="section-header">
+    <h2>Reunioes Recentes</h2>
+    <input type="text" class="search-box" id="searchBox" placeholder="Buscar por cliente ou assunto..." oninput="filtrarReunioes()">
+  </div>
+
+  <div class="meetings-list" id="meetingsList">
+    <div class="empty-state">
+      <div class="icon">&#128196;</div>
+      <h3>Nenhuma reuniao encontrada</h3>
+      <p>Inicie uma captura ou envie um audio para comecar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Detalhes -->
+<div class="modal-overlay" id="modalOverlay" onclick="fecharModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div>
+        <h2 id="modalTitulo">Detalhes da Reuniao</h2>
+        <span id="modalBadge" class="badge processado"></span>
+      </div>
+      <button class="modal-close" onclick="fecharModal()">&times;</button>
+    </div>
+    <div id="modalBody">
+      <div class="spinner"></div> Carregando...
+    </div>
+  </div>
+</div>
+
+<!-- Notificacao -->
+<div class="notification" id="notification"></div>
+
+<script>
+  // === Estado da Aplicacao ===
+  const API_BASE = window.location.origin + '/api';
+  let reunioesCache = [];
+  let capturaAtiva = false;
+
+  // === Inicializacao ===
+  document.addEventListener('DOMContentLoaded', () => {
+    verificarStatus();
+    carregarReunioes();
+    // Atualiza status a cada 15 segundos
+    setInterval(verificarStatus, 15000);
+  });
+
+  // Drag & Drop
+  const uploadArea = document.getElementById('uploadArea');
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const arquivo = e.dataTransfer.files[0];
+    if (arquivo) enviarAudio(arquivo);
+  });
+
+  // === Funcoes da API ===
+
+  async function verificarStatus() {
+    try {
+      const resp = await fetch(`${API_BASE}/status`);
+      const dados = await resp.json();
+
+      const badge = document.getElementById('statusBadge');
+      const texto = document.getElementById('statusText');
+
+      if (dados.sucesso) {
+        badge.className = 'status-badge online';
+        texto.textContent = 'Operacional';
+
+        // Atualiza plataforma
+        document.getElementById('statPlataforma').textContent =
+          dados.integracoes?.plataformaAtiva || 'Local';
+
+        // Atualiza estado de captura
+        if (dados.captura?.ativa && !capturaAtiva) {
+          capturaAtiva = true;
+          atualizarBotaoCaptura();
+        }
+      } else {
+        badge.className = 'status-badge offline';
+        texto.textContent = 'Indisponivel';
+      }
+    } catch {
+      const badge = document.getElementById('statusBadge');
+      const texto = document.getElementById('statusText');
+      badge.className = 'status-badge offline';
+      texto.textContent = 'Sem conexao';
+    }
+  }
+
+  async function carregarReunioes() {
+    try {
+      const resp = await fetch(`${API_BASE}/meetings`);
+      const dados = await resp.json();
+
+      if (dados.sucesso) {
+        reunioesCache = dados.reunioes || [];
+        renderizarReunioes(reunioesCache);
+
+        // Atualiza estatisticas
+        document.getElementById('statTotal').textContent = reunioesCache.length;
+        document.getElementById('statProcessadas').textContent =
+          reunioesCache.filter(r => r.status === 'processado').length;
+        document.getElementById('statPropostas').textContent =
+          reunioesCache.filter(r => r.proposta || r.caminhoPropostaHtml).length;
+      }
+    } catch {
+      notificar('Erro ao carregar reunioes. Verifique se o servidor esta ativo.', 'error');
+    }
+  }
+
+  function renderizarReunioes(reunioes) {
+    const container = document.getElementById('meetingsList');
+
+    if (!reunioes || reunioes.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">&#128196;</div>
+          <h3>Nenhuma reuniao encontrada</h3>
+          <p>Inicie uma captura ou envie um audio para comecar.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = reunioes.map(r => `
+      <div class="meeting-card" onclick="abrirDetalhes('${r.id}')">
+        <div class="meeting-info">
+          <h3>${escapeHtml(r.assunto || 'Reuniao sem titulo')}</h3>
+          <div class="meeting-meta">
+            <span>&#128197; ${formatarData(r.criadoEm || r.inicio)}</span>
+            <span>&#128100; ${escapeHtml(r.cliente || 'N/A')}</span>
+            <span>&#128225; ${escapeHtml(r.plataforma || 'local')}</span>
+            <span class="badge ${r.status || 'pendente'}">${r.status || 'pendente'}</span>
+          </div>
+        </div>
+        <div class="meeting-actions">
+          ${r.proposta || r.caminhoPropostaHtml ? `<button class="btn-small" onclick="event.stopPropagation(); abrirProposta('${r.id}')">Proposta</button>` : ''}
+          ${r.caminhoPropostaPdf ? `<button class="btn-small" onclick="event.stopPropagation(); baixarPdf('${r.id}')">PDF</button>` : ''}
+          <button class="btn-small" onclick="event.stopPropagation(); baixarNotas('${r.id}')">Notas</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filtrarReunioes() {
+    const termo = document.getElementById('searchBox').value.toLowerCase();
+    if (!termo) {
+      renderizarReunioes(reunioesCache);
+      return;
+    }
+    const filtradas = reunioesCache.filter(r =>
+      (r.assunto || '').toLowerCase().includes(termo) ||
+      (r.cliente || '').toLowerCase().includes(termo)
+    );
+    renderizarReunioes(filtradas);
+  }
+
+  async function toggleCaptura() {
+    const btn = document.getElementById('btnCapturar');
+
+    if (capturaAtiva) {
+      // Parar captura
+      try {
+        btn.disabled = true;
+        const resp = await fetch(`${API_BASE}/meetings/capture/stop`, { method: 'POST' });
+        const dados = await resp.json();
+
+        if (dados.sucesso) {
+          capturaAtiva = false;
+          atualizarBotaoCaptura();
+          notificar('Captura finalizada com sucesso! Processando audio...', 'success');
+          setTimeout(carregarReunioes, 2000);
+        } else {
+          notificar(dados.mensagem || 'Erro ao parar captura.', 'error');
+        }
+      } catch (e) {
+        notificar('Erro de conexao ao parar captura.', 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    } else {
+      // Iniciar captura
+      const assunto = prompt('Assunto da reuniao (opcional):') || '';
+      const cliente = prompt('Nome do cliente (opcional):') || '';
+
+      try {
+        btn.disabled = true;
+        const resp = await fetch(`${API_BASE}/meetings/capture/start`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assunto, cliente }),
+        });
+        const dados = await resp.json();
+
+        if (dados.sucesso) {
+          capturaAtiva = true;
+          atualizarBotaoCaptura();
+          notificar('Captura de audio iniciada!', 'success');
+        } else {
+          notificar(dados.mensagem || 'Erro ao iniciar captura.', 'error');
+        }
+      } catch (e) {
+        notificar('Erro de conexao ao iniciar captura.', 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  }
+
+  function atualizarBotaoCaptura() {
+    const btn = document.getElementById('btnCapturar');
+    const texto = document.getElementById('btnCapturarTexto');
+
+    if (capturaAtiva) {
+      btn.classList.add('recording');
+      texto.textContent = 'Parar Captura';
+    } else {
+      btn.classList.remove('recording');
+      texto.textContent = 'Iniciar Captura';
+    }
+  }
+
+  function toggleUpload() {
+    const area = document.getElementById('uploadArea');
+    area.classList.toggle('visible');
+  }
+
+  async function enviarAudio(arquivo) {
+    if (!arquivo) return;
+
+    const progress = document.getElementById('uploadProgress');
+    progress.style.display = 'block';
+
+    try {
+      const formData = new FormData();
+      formData.append('audio', arquivo);
+
+      const cliente = prompt('Nome do cliente (opcional):') || '';
+      const assunto = prompt('Assunto da reuniao (opcional):') || '';
+      if (cliente) formData.append('cliente', cliente);
+      if (assunto) formData.append('assunto', assunto);
+
+      const resp = await fetch(`${API_BASE}/meetings/process`, {
+        method: 'POST',
+        body: formData,
+      });
+      const dados = await resp.json();
+
+      if (dados.sucesso) {
+        notificar('Audio enviado com sucesso! Processando...', 'success');
+        document.getElementById('uploadArea').classList.remove('visible');
+        setTimeout(carregarReunioes, 3000);
+      } else {
+        notificar(dados.mensagem || 'Erro ao enviar audio.', 'error');
+      }
+    } catch (e) {
+      notificar('Erro de conexao ao enviar audio.', 'error');
+    } finally {
+      progress.style.display = 'none';
+      document.getElementById('fileInput').value = '';
+    }
+  }
+
+  async function abrirDetalhes(id) {
+    const overlay = document.getElementById('modalOverlay');
+    const body = document.getElementById('modalBody');
+    const titulo = document.getElementById('modalTitulo');
+    const badge = document.getElementById('modalBadge');
+
+    overlay.classList.add('active');
+    body.innerHTML = '<div class="spinner"></div> Carregando detalhes...';
+
+    try {
+      const resp = await fetch(`${API_BASE}/meetings/${id}`);
+      const dados = await resp.json();
+
+      if (!dados.sucesso) {
+        body.innerHTML = `<p>Erro: ${dados.mensagem}</p>`;
+        return;
+      }
+
+      const r = dados.reuniao;
+      titulo.textContent = r.assunto || 'Reuniao sem titulo';
+      badge.textContent = r.status || 'pendente';
+      badge.className = `badge ${r.status || 'pendente'}`;
+
+      body.innerHTML = `
+        <div class="detail-section">
+          <h4>Informacoes Gerais</h4>
+          <div class="content">
+<strong>Cliente:</strong> ${escapeHtml(r.cliente || 'N/A')}
+<strong>Data:</strong> ${formatarData(r.criadoEm || r.inicio)}
+<strong>Plataforma:</strong> ${escapeHtml(r.plataforma || 'local')}
+<strong>Status:</strong> ${r.status || 'pendente'}
+          </div>
+        </div>
+
+        ${r.transcricao ? `
+        <div class="detail-section">
+          <h4>Transcricao</h4>
+          <div class="content" style="max-height: 200px; overflow-y: auto;">${escapeHtml(r.transcricao)}</div>
+        </div>` : ''}
+
+        ${r.analise ? `
+        <div class="detail-section">
+          <h4>Analise</h4>
+          <div class="content">${escapeHtml(typeof r.analise === 'string' ? r.analise : JSON.stringify(r.analise, null, 2))}</div>
+        </div>` : ''}
+
+        ${r.proposta ? `
+        <div class="detail-section">
+          <h4>Proposta Comercial</h4>
+          <div class="content">${escapeHtml(typeof r.proposta === 'string' ? r.proposta : JSON.stringify(r.proposta, null, 2))}</div>
+        </div>` : ''}
+
+        <div class="detail-actions">
+          ${r.caminhoPropostaHtml ? `<button class="btn" onclick="abrirProposta('${r.id}')">Ver Proposta</button>` : ''}
+          ${r.caminhoPropostaPdf ? `<button class="btn secondary" onclick="baixarPdf('${r.id}')">Baixar PDF</button>` : ''}
+          <button class="btn secondary" onclick="baixarNotas('${r.id}')">Notas Obsidian</button>
+        </div>
+      `;
+    } catch (e) {
+      body.innerHTML = '<p>Erro ao carregar detalhes. Verifique a conexao.</p>';
+    }
+  }
+
+  function fecharModal(event) {
+    if (event && event.target !== document.getElementById('modalOverlay') && event.target !== document.querySelector('.modal-close')) return;
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
+
+  function abrirProposta(id) {
+    window.open(`${API_BASE}/meetings/${id}/proposal`, '_blank');
+  }
+
+  function baixarPdf(id) {
+    window.open(`${API_BASE}/meetings/${id}/pdf`, '_blank');
+  }
+
+  function baixarNotas(id) {
+    window.open(`${API_BASE}/meetings/${id}/notes`, '_blank');
+  }
+
+  // === Utilitarios ===
+
+  function formatarData(iso) {
+    if (!iso) return 'N/A';
+    try {
+      return new Date(iso).toLocaleDateString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    } catch {
+      return iso;
+    }
+  }
+
+  function escapeHtml(texto) {
+    if (!texto) return '';
+    const div = document.createElement('div');
+    div.textContent = texto;
+    return div.innerHTML;
+  }
+
+  function notificar(mensagem, tipo = 'info') {
+    const el = document.getElementById('notification');
+    el.textContent = mensagem;
+    el.className = `notification ${tipo} show`;
+    setTimeout(() => { el.classList.remove('show'); }, 4000);
+  }
+
+  // Fechar modal com ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') fecharModal();
+  });
+</script>
+
+</body>
+</html>
